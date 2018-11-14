@@ -1,10 +1,13 @@
-package entityclasses;
+package TeenTitians.src.entityclasses;
 
 import jdk.nashorn.internal.ir.IfNode;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class Room {
 //entityclasses.Room Class by Jerson&Wesley; Text File by Clyde, ReadFile by Austin. Jerson, Clyde & Wesley did
@@ -17,27 +20,39 @@ public class Room {
     private String monsters;
     private String items;
     private String teleporter;
-    private String stairs;
+    private String puzzleLandmark;
     private String[] exitList;
     private String currentRoom = "R1";
 
+    //Allows you to jump to any room.
+    public boolean DEBUG_MODE = true;
 
-    public Room(String description, String roomID, String doors, String monsters, String items, String teleporter, String stairs, String exitList) {
+
+    public Room(String description, String roomID, String doors, String monsters, String items, String teleporter, String puzzle, String exitList) {
         this.description = description;
         this.roomID = roomID;
         this.doors = doors;
         this.monsters = monsters;
         this.items = items;
         this.teleporter = teleporter;
-        this.stairs = stairs;
+        this.puzzleLandmark = puzzle;
         this.exitList = exitList.split(",");
         currentRoom = roomID;
     }
 
     public Room (String roomID)
     {
-        readFile(roomID);
+        Room room = readFile(roomID);
 
+        this.description = room.description;
+        this.roomID = room.roomID;
+        this.doors = room.doors;
+        this.monsters = room.monsters;
+        this.items = room.items;
+        this.teleporter = room.teleporter;
+        this.puzzleLandmark = room.puzzleLandmark;
+        this.exitList = room.exitList;
+        currentRoom = roomID;
     }
 
     public Room() {
@@ -47,7 +62,7 @@ public class Room {
         monsters = "none";
         items = "N/A";
         teleporter = "N/A";
-        stairs = "N/A";
+        puzzleLandmark = "N/A";
         exitList = "2,3".split(",");
 
     }
@@ -100,12 +115,12 @@ public class Room {
         this.teleporter = teleporter;
     }
 
-    public String getStairs() {
-        return stairs;
+    public String getPuzzleLandmark() {
+        return puzzleLandmark;
     }
 
-    public void setStairs(String stairs) {
-        this.stairs = stairs;
+    public void setStairs(String puzzle) {
+        this.puzzleLandmark = puzzle;
     }
 
     public String[] getExitList() {
@@ -125,9 +140,66 @@ public class Room {
     }
 
     public Room exitRoom(String roomID) {
+        Room room;
         currentRoom = roomID;
-        Room room = readFile(roomID);
+        if (roomID.contains("SR")) {
+            boolean isSecretRoom = false;
+            for (int i = 0; i < exitList.length; i++) {
+                if (exitList[i].contains("SR")) {
+                    isSecretRoom = true;
+
+                }
+            }
+            if (isSecretRoom) {
+                if (roomID.charAt(roomID.length()-1) == '1' && exitList[exitList.length-1].contains("1")) {
+                    return room = new Room("28");
+                } else if (roomID.charAt(roomID.length() - 1) == '2' && exitList[exitList.length-1].contains("2")) {
+                    return room = new Room(roomID = "29");
+                } else if (roomID.charAt(roomID.length() - 1) == '3' && exitList[exitList.length-1].contains("3")) {
+                    return room = new Room(roomID = "30");
+                } else if (roomID.charAt(roomID.length() - 1) == '4' && exitList[exitList.length-1].contains("4")) {
+                    return room = new Room("31");
+                } else if (roomID.charAt(roomID.length() - 1) == '5' && exitList[exitList.length-1].contains("5")) {
+                    return room = new Room("32");
+                } else if (roomID.charAt(roomID.length() - 1) == '6' && exitList[exitList.length-1].contains("6")) {
+                    return room = new Room("33");
+                } else if (roomID.charAt(roomID.length() - 1) == '7' && exitList[exitList.length-1].contains("7")) {
+                    return room = new Room("34");
+                }
+            }
+        }
+        String newRoomID = "";
+        for (int i = 0; i < roomID.length(); i++) {
+                //IF current character is an interger, than add it to newRoomID
+            if (roomID.charAt(i) == '1' || roomID.charAt(i) == '2' || roomID.charAt(i) == '3' || roomID.charAt(i) == '4' || roomID.charAt(i) == '5' || roomID.charAt(i) == '6' || roomID.charAt(i) == '7' || roomID.charAt(i) == '8' || roomID.charAt(i) == '9' || roomID.charAt(i) == '0') {
+                newRoomID += roomID.charAt(i);
+            }
+        }
+        String tempFilter = "";
+        for (int h = 0; h < exitList.length; h++) {
+            tempFilter = "";
+            for (int i = 0; i < exitList[h].length(); i++) {
+                if (exitList[h].charAt(i) == '1' || exitList[h].charAt(i) == '2' || exitList[h].charAt(i) == '3' || exitList[h].charAt(i) == '4' || exitList[h].charAt(i) == '5' || exitList[h].charAt(i) == '6' || exitList[h].charAt(i) == '7' || exitList[h].charAt(i) == '8' || exitList[h].charAt(i) == '9' || exitList[h].charAt(i) == '0') {
+                    tempFilter += exitList[h].charAt(i);
+                }
+            }
+            if (newRoomID.equals(tempFilter)) {
+                room = readFile(newRoomID);
+                return room;
+            }
+        }
+        room = new Room(this.roomID);
         return room;
+
+    }
+
+    public String[] addExit (String newExit) {
+        String[] newList = new String[exitList.length + 1];
+        for (int i = 0; i < exitList.length; i++) {
+            newList[i] = exitList[i];
+        }
+        newList[newList.length -1] = newExit;
+        return newList;
     }
 
     public String enterRoom(Room room) {
@@ -135,30 +207,28 @@ public class Room {
     }
 
     public Room readFile(String roomID) {
-//        //Test Lines
-//        if (roomID.equalsIgnoreCase("2")) {
-//            return new Room("You see iron forged shackles and chains attached to the walls of what appears to be a Prison Cell. There are cracks on the far side of the wall behind the long scroll painting...", "2", "South West North", "none", "N/A", "N/A", "N/A", "1,3");
-//        }else if(roomID.equalsIgnoreCase("3")) {
-//            return new Room("You see a large corridor with several gargoyles around the room. You also see a crest in the middle of the ground. There are 4 doors around you not including the one you just came in from.", "3", "South West North", "none", "N/A", "N/A", "N/A", "1,2,4,7,8");
-//        }else if(roomID.equalsIgnoreCase("4")) {
-//            return new Room("For some reason there appears to be a cross on the wall. There is a tapestry covering the wall. The room is split in the middle with seats you can kneel on both sides. Not sure why there is a chapel down here. Looking at the tapestry again, the colors seem to shift...", "4", "South West North", "none", "N/A", "N/A", "N/A", "4,8");
-//        }else if(roomID.equalsIgnoreCase("5")) {
-//            return new Room("As you enter you notice the temperature dropped and is on the cooler side now. There are barrels stacked on top of one another scattered across the room. Looks like someone found the wine cellar and had a party for themselves.", "5", "South West North", "none", "N/A", "N/A", "N/A", "3,8");
-//        }else if(roomID.equalsIgnoreCase("6")) {
-//            return new Room("You push a large granite door to get in this room. This small room has almost no furniture. Decorated with large bones, broken stone, and dead vermin all around. The pentagram on the floor covered in blood makes the room seem more like a sacrificial chamber.", "6", "South West North", "none", "N/A", "N/A", "N/A", "4,7");
-//        }else if(roomID.equalsIgnoreCase("7")) {
-//            return new Room("As you enter this strangely tiny room, you are surrounded by bookcases that are strangely arranged. Only one bookcase is covering the wall, and there are a series of 5 levers off in a corner...", "7", "South West North", "none", "N/A", "N/A", "N/A", "8, 5");
-//        }else if(roomID.equalsIgnoreCase("8")) {
-//            return new Room("When you enter this room you see that it is rather small. It only has has one chair with several spikes on the seat and the back of the chair. You also see the remains of a fire under the seat. You also spot heavy bags of sand in the corner of the room. This chair doesn't look very comfortable at all", "8", "South West North", "none", "N/A", "N/A", "N/A", "3,6");
-//        }else{
-//            return new Room("You push a large granite door to get in this room. This small room has almost no furniture. Decorated with large bones, broken stone, and dead vermin all around. The pentagram on the floor covered in blood makes the room seem more like a sacrificial chamber.", "0", "South West North", "none", "N/A", "N/A", "N/A", "3,2");
-//        }
+        String newRoomID = "";
+        for (int i = 0; i < roomID.length(); i++) {
+            //IF current character is an interger, than add it to newRoomID
+            if (roomID.charAt(i) == '1' || roomID.charAt(i) == '2' || roomID.charAt(i) == '3' || roomID.charAt(i) == '4' || roomID.charAt(i) == '5' || roomID.charAt(i) == '6' || roomID.charAt(i) == '7' || roomID.charAt(i) == '8' || roomID.charAt(i) == '9' || roomID.charAt(i) == '0') {
+                newRoomID += roomID.charAt(i);
+            }
+        }
+
         String line = "";
-        int wantedLine = Integer.parseInt(roomID);
-        System.out.println(wantedLine);
+        int wantedLine = Integer.parseInt(newRoomID);
+
         int lineNo;
         try {
-            FileReader fr = new FileReader("C:/Users/Wes McMillen/Desktop/Text-Based Adventure Game/src/entityclasses/PhytextFile.txt");
+            URL url = getClass().getResource("PhytextFile.txt");
+            File file = null;
+            try {
+                file = new File(url.toURI()  );
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            FileReader fr = new FileReader(file);
 
             BufferedReader br = new BufferedReader(fr);
             for (lineNo = 1; lineNo <= 105; lineNo++) {
@@ -168,9 +238,7 @@ public class Room {
                     br.readLine();
             }
             String[] roomArray = line.split("-");
-            for (int i = 0; i < roomArray.length; i++) {
-                System.out.println(roomArray[i]);
-            }
+
 
             String roomsID = roomArray[0];
             String description = roomArray[1];

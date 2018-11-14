@@ -1,6 +1,6 @@
-package entityclasses;
+package TeenTitians.src.entityclasses;
 
-import guiandhandler.NavigationGUI;
+import TeenTitians.src.guiandhandler.NavigationGUI;
 
 public class Game {
 

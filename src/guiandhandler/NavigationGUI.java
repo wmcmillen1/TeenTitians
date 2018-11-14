@@ -1,6 +1,7 @@
-package guiandhandler;
+package TeenTitians.src.guiandhandler;
 
-import entityclasses.Room;
+import TeenTitians.src.entityclasses.Puzzle;
+import TeenTitians.src.entityclasses.Room;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,14 +11,20 @@ import java.awt.event.ActionListener;
 
 
 public class NavigationGUI {
-    Room room = new Room();
+    protected Room room = new Room("1");
+    Puzzle puzzle = new Puzzle(room.getPuzzleLandmark());
+    PuzzleGUI pGUI;
+
     protected JFrame frame;
     protected JPanel mainTextP, statsP, cmdLineP;
     protected JTextArea mainTextA, statsTA;
     protected JTextField cmdLineTF;
-    protected JButton showExits, nExit, sExit, wExit, eExit;
+    protected JButton showExits, searchItem, searchPuzzle, back;
     protected Container con;
-    Font font = new Font("Times new Roman", Font.PLAIN, 24);
+    private Font font = new Font("Times new Roman", Font.PLAIN, 24);
+
+    private boolean showingExits = false;
+    private boolean hasPuzzlebeenlaunched = false;
     //GUIHandler guiHandler;
 
 
@@ -81,50 +88,71 @@ public class NavigationGUI {
             cmdLineTF.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    room = room.exitRoom(cmdLineTF.getText());
-                    mainTextA.setText(room.enterRoom(room));
-                    showExits.setVisible(true);
-                    statsP.setVisible(true);
-                    cmdLineTF.setText("");
+                    if (showingExits) {
+                        room = room.exitRoom(cmdLineTF.getText());
+                        mainTextA.setText(room.enterRoom(room));
+                        showExits.setVisible(true);
+                        statsP.setVisible(true);
+                        cmdLineTF.setText("");
+                        puzzle = new Puzzle(room.getPuzzleLandmark());
+                        showingExits = false;
+                    }else{
+                        if (cmdLineTF.getText().equalsIgnoreCase("/search")) {
+                            search();
+                            cmdLineTF.setText("");
+                        }
+                    }
                 }
             });
             cmdLineP.add(cmdLineTF);
 
-//            wExit = new JButton("West Exit");
-//            wExit.setBounds(460,500,500,50);
-//            wExit.setBackground(Color.black);
-//            wExit.setForeground(Color.white);
-//            wExit.setFont(font);
-//            wExit.addActionListener(guiHandler);
-//            wExit.setActionCommand("wE");
-//            wExit.setFocusPainted(true);
-//
-//            nExit = new JButton("North Exit");
-//            wExit.setBounds(510,500,500,50);
-//            nExit.setBackground(Color.black);
-//            nExit.setForeground(Color.white);
-//            nExit.setFont(font);
-//            nExit.addActionListener(guiHandler);
-//            nExit.setFocusPainted(true);
-//            nExit.setActionCommand("nE");
-//
-//            sExit = new JButton("South Exit");
-//            wExit.setBounds(560,500,500,50);
-//            sExit.setBackground(Color.black);
-//            sExit.setForeground(Color.white);
-//            sExit.setFont(font);
-//            sExit.addActionListener(guiHandler);
-//            sExit.setFocusPainted(true);
-//            sExit.setActionCommand("sE");
-//
-//            eExit = new JButton("East Exit");
-//            eExit.setBounds(610,500,500,50);
-//            eExit.setBackground(Color.black);
-//            eExit.setForeground(Color.white);
-//            eExit.setFont(font);
-//            eExit.addActionListener(guiHandler);
-//            eExit.setFocusPainted(true);
-//            eExit.setActionCommand("eE");
+            searchItem = new JButton("");
+            searchItem.setVisible(false);
+            searchItem.setBackground(Color.BLACK);
+            searchItem.setForeground(Color.white);
+            searchItem.setFont(font);
+            searchItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mainTextA.setText("you finds item, yey");
+                }
+            });
+            mainTextP.add(searchItem);
+
+            searchPuzzle = new JButton("");
+            searchPuzzle.setVisible(false);
+            searchPuzzle.setBackground(Color.BLACK);
+            searchPuzzle.setForeground(Color.white);
+            searchPuzzle.setFont(font);
+            searchPuzzle.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (puzzle.isPuzzle()) {
+                        pGUI = new PuzzleGUI(room.getPuzzleLandmark(), room.getCurrentRoom());
+                        hasPuzzlebeenlaunched = true;
+                    }
+                }
+            });
+            mainTextP.add(searchPuzzle);
+
+            back = new JButton("Back");
+            back.setVisible(false);
+            back.setBackground(Color.BLACK);
+            back.setForeground(Color.white);
+            back.setFont(font);
+            back.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mainTextA.setText(room.getDecription());
+                    showExits.setVisible(true);
+                    statsP.setVisible(true);
+                    cmdLineTF.setText("");
+                    back.setVisible(false);
+                    searchPuzzle.setVisible(false);
+                    searchItem.setVisible(false);
+                }
+            });
+            cmdLineP.add(back);
 
             con.add(cmdLineP);
         }
@@ -193,14 +221,39 @@ public class NavigationGUI {
         this.con = con;
     }
 
+
     public void showExits() {
-        String exitText = "";
+        if (hasPuzzlebeenlaunched) {
+            for (int i = 0; i < pGUI.room.getExitList().length; i++) {
+                System.out.println(pGUI.room.getExitList());
+            }
+            room.setExitList(pGUI.room.getExitList());
+            hasPuzzlebeenlaunched = false;
+        }
+
+            String exitText = "";
         for (int i = 0; i < room.getExitList().length; i++) {
             exitText += room.getExitList()[i] + ", ";
         }
         mainTextA.setText(exitText);
         showExits.setVisible(false);
         statsP.setVisible(false);
+        showingExits = true;
+        back.setVisible(true);
+    }
+
+    public void search() {
+
+        puzzle.setUpPuzzle();
+        searchPuzzle.setVisible(true);
+        searchItem.setVisible(true);
+        statsTA.setVisible(false);
+        back.setVisible(true);
+        showExits.setVisible(false);
+        searchPuzzle.setText(puzzle.getpButtonDesc());
+
+
+
     }
 }
 
