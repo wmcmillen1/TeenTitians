@@ -1,32 +1,38 @@
 package TeenTitians.src.entityclasses.itemclasses;
 //Armor by Austin
-public class Armor extends Item
+public class Armor extends Item 
 {
-	public double durable;
+	public double defence;
+	public double speed;
+	public double accuracy;
+	
 	
 	public Armor() 
 	{
 		super();
-		durable = 0.0;
+		defence = 0;
+		speed = 0;
+		accuracy = 0;
+		
 	}
 	
 public Armor(int stats, boolean isConsumable,  boolean equip)
 {
-	this.stats = stats;
-	this.isConsumable = isConsumable;
-	this.equip = equip;
+	
 }
-	public Armor(double durable) 
+	public Armor(double defence, double speed, double accuracy) 
 	{
-	this.durable = durable;	
+	this.defence = defence;
+	this.speed = speed;
+	this.accuracy = accuracy;
 	}
 	
-	public double block(double damage, int hitpoints, int stats) 
+	public String block(double damage, int hitpoints, int stats) 
 	{
+		System.out.println("");
 		int durable = stats - hitpoints;
-		return durable;
+		System.out.println("Attack blocked,");
+		return "-" + durable;
 	}
 
 }
-
-
