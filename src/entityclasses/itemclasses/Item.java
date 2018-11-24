@@ -3,13 +3,13 @@ package TeenTitians.src.entityclasses.itemclasses;
 import java.util.ArrayList;
 import java.util.Scanner;
 //Items by Austin
-public class Item {
+public class Item 
+{
 	public int stats;
 	public boolean isConsumable;
 	public boolean equip;
-
+	Scanner input = new Scanner(System.in);
 	ArrayList<String> Inventory = new ArrayList<String>();
-
 	public Item() {
 		stats = 13;
 		isConsumable = false;
@@ -113,27 +113,25 @@ public class Item {
 	}
 	
 
-	public boolean equip() {
-		Scanner input = new Scanner(System.in);
+	public void equip() 
+	{
+		
 		System.out.println("Do you want to equip this item.");
 		String item = input.nextLine();
 		if (item.equalsIgnoreCase("yes")) 
 		{
-			System.out.println("TeenTitians.src.entityclasses.itemclasses.Item has beem added to your inventory");
+			System.out.println("Item has beem added to your inventory");
 			System.out.println(Inventory);
-			return true;
-			
-		}
-		return false;
+	}
 	}
 
 	public boolean unequip() {
-		Scanner input = new Scanner(System.in);
+		
 		System.out.println("Do you want to remove this item.");
 		String item = input.nextLine();
 		if (item.equalsIgnoreCase("yes")) 
 		{
-			System.out.println("TeenTitians.src.entityclasses.itemclasses.Item has beem removed from your inventory");
+			System.out.println("Item has beem removed from your inventory");
 			return true;
 		}
 		return false;
@@ -148,11 +146,49 @@ public class Item {
 		}
 	}
 
-	public void examine() {
-		System.out.println(getStats());
+	public void examine() 
+	{
+		System.out.println("Would you like to examine this item? ");
+		String ans = input.nextLine();
+		if(ans.equalsIgnoreCase("yes"))
+		{
+			System.out.println("Item Stats: " + getStats());
+		}
+		else
+		{
+			System.out.println();
+		}
+		
+	}
+	
+	public int usePhylacteryheal() 
+	{
+	int healup = 0;
+		
+		System.out.println("Would you like to use the Phylactery? ");
+		String ans = input.nextLine();
+		if(ans.equalsIgnoreCase("yes"))
+		{
+			return healup + 1;
+		}
+		else
+		{
+			return healup;
+		}	
+	}
+	
+	public void usePhylacteryhint() 
+	{
+		
+		System.out.println("Would you like to use the Phylactery? ");
+		String ans = input.nextLine();
+		if(ans.equalsIgnoreCase("yes"))
+		{
+		 System.out.println("You will recieve a hint.");
+		}
+		
 	}
 
-	public void usePhylactery() {
-
 	}
+
 }
