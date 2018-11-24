@@ -1,6 +1,6 @@
 package TeenTitians.src.entityclasses.gameentities;
 //Entity Class by Jerson&Wesley
-public class entity {
+public class Entity {
 	protected String name;
 	protected int ID;
 	protected int health;
@@ -11,7 +11,7 @@ public class entity {
 	protected int accuracy;
 
 
-	public entity() {
+	public Entity() {
 		name = "";
 		health = 0;
 		currentHealth = 0;
@@ -22,7 +22,7 @@ public class entity {
 		defense = 0;
 	}
 
-	public entity(int health, int currentHealth, int speed, int accuracy, int ID, int attack, String name,
+	public Entity(int health, int currentHealth, int speed, int accuracy, int ID, int attack, String name,
 			int defense) {
 		this.accuracy = accuracy;
 		this.health = health;

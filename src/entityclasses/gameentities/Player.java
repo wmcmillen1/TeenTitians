@@ -3,7 +3,7 @@ package TeenTitians.src.entityclasses.gameentities;
 import java.util.Random;
 //Player class by Jerson&Wesleyw
 
-public final class Player extends entity {
+public final class Player extends Entity {
 
 	private String description;
 	private boolean isBlocking = false;

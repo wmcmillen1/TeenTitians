@@ -1,23 +1,18 @@
 package TeenTitians.src.entityclasses.gameentities;
 
-import TeenTitians.src.entityclasses.Game;
-
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 //Monster class by Jerson&Wesley
-public final class monster extends entity
+public final class Monster extends Entity
 {
 
     private String description;
 
-    public monster()
+    public Monster()
     {
     	super();
     	description = "";
     }
 
-    public monster(int health, int currentHealth, int speed, int accuracy, int ID, int attack, String name, int defense, String description) {
+    public Monster(int health, int currentHealth, int speed, int accuracy, int ID, int attack, String name, int defense, String description) {
         super(health, currentHealth, speed, accuracy, ID, attack, name, defense);
         this.description = description;
     }

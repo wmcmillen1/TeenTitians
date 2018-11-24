@@ -8,10 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-
+//Room class by Wesley
 public class Room {
-//entityclasses.Room Class by Jerson&Wesley; Text File by Clyde, ReadFile by Austin. Jerson, Clyde & Wesley did
-    //their portioned work on time and fully completed.
+
 
     //exit enter//
     private String description;
@@ -22,7 +21,6 @@ public class Room {
     private String teleporter;
     private String puzzleLandmark;
     private String[] exitList;
-    private String currentRoom = "R1";
 
     //Allows you to jump to any room.
     public boolean DEBUG_MODE = true;
@@ -37,7 +35,6 @@ public class Room {
         this.teleporter = teleporter;
         this.puzzleLandmark = puzzle;
         this.exitList = exitList.split(",");
-        currentRoom = roomID;
     }
 
     public Room (String roomID)
@@ -52,7 +49,6 @@ public class Room {
         this.teleporter = room.teleporter;
         this.puzzleLandmark = room.puzzleLandmark;
         this.exitList = room.exitList;
-        currentRoom = roomID;
     }
 
     public Room() {
@@ -131,17 +127,9 @@ public class Room {
         this.exitList = exitList;
     }
 
-    public String getCurrentRoom() {
-        return currentRoom;
-    }
-
-    public void setCurrentRoom(String currentRoom) {
-        this.currentRoom = currentRoom;
-    }
 
     public Room exitRoom(String roomID) {
         Room room;
-        currentRoom = roomID;
         if (roomID.contains("SR")) {
             boolean isSecretRoom = false;
             for (int i = 0; i < exitList.length; i++) {
