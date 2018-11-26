@@ -2,6 +2,7 @@ package TeenTitians.src.entityclasses.gameentities;
 
 import java.util.ArrayList;
 //Merchant class by Clyde
+//Merchant was not implemented due solely to time constraints, and focusing on more Mission critical features.
 public class Merchant {
 	ArrayList<String> buy = new ArrayList<String>();
 	ArrayList<String> sell = new ArrayList<String>();

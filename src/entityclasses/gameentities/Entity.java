@@ -2,7 +2,7 @@ package TeenTitians.src.entityclasses.gameentities;
 //Entity Class by Jerson&Wesley
 public class Entity {
 	protected String name;
-	protected int ID;
+	protected String ID;
 	protected int health;
 	protected int currentHealth;
 	protected int speed;
@@ -17,12 +17,12 @@ public class Entity {
 		currentHealth = 0;
 		speed = 0;
 		accuracy = 0;
-		ID = 0;
+		ID = "";
 		attack = 0;
 		defense = 0;
 	}
 
-	public Entity(int health, int currentHealth, int speed, int accuracy, int ID, int attack, String name,
+	public Entity(int health, int currentHealth, int speed, int accuracy, String ID, int attack, String name,
 			int defense) {
 		this.accuracy = accuracy;
 		this.health = health;
@@ -44,11 +44,11 @@ public class Entity {
 		this.name = name;
 	}
 
-	public int getID() {
+	public String getID() {
 		return ID;
 	}
 
-	public void setID(int iD) {
+	public void setID(String iD) {
 		ID = iD;
 	}
 
@@ -98,13 +98,21 @@ public class Entity {
 
 	public void takeDamage(int damageValue) {
 		if (defense <= 30) {
-			currentHealth -= (damageValue-5);
+			if (damageValue-5 > 0) {
+				currentHealth -= (damageValue-5);
+			}
 		}else if (defense > 30 && defense <= 50) {
-			currentHealth -= (damageValue-15);
+			if (damageValue-15 > 0) {
+				currentHealth -= (damageValue-15);
+			}
 		}else if (defense > 50 && defense <= 70) {
-			currentHealth -= (damageValue-30);
+			if (damageValue-30 > 0) {
+				currentHealth -= (damageValue-30);
+			}
 		}else{
-			currentHealth -= (damageValue-45);
+			if (damageValue-45 > 0) {
+				currentHealth -= (damageValue-45);
+			}
 		}
 	}
 }

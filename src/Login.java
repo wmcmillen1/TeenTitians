@@ -6,36 +6,21 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Login {
     private String userName;
     private String password;
-    private File file;
-
 
 
     public Login(String userName, String password) {
         this.userName = userName;
         this.password = password;
-        URL url = getClass().getResource("savestate.txt");
-        try {
-            file = new File(url.toURI()  );
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public Login() {
         userName = "";
         password = "";
-        URL url = getClass().getResource("savestate.txt");
-        try {
-            file = new File(url.toURI()  );
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public String getUserName() {
@@ -54,68 +39,106 @@ public class Login {
         this.password = password;
     }
 
-    public void writeLoginInfo() throws IOException {
-        //on odd # line write username.password
-        String str = userName + "." + password + "\n";
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        writer.write(str);
-        writer.close();
-    }
+//Code beyond Created by Austin
+    Properties prop = new Properties();
+    InputStream input = null;
+    OutputStream output = null;
 
-    public void writeSaveFile(String roomID) throws IOException {
-        //on even # lines write current room number and Inventory
-        String str = roomID;
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        writer.write(str);
-        writer.close();
-    }
-
-    public int readLoginInfo () {
-        //on odd # lines read username.password, if they don't match current instance, then move to next odd # line
-        int lineNo;
+    /**
+     * Name: writeinfo
+     * This method writes the username and password to the textfile.
+     */
+    public void writeInfo() {
         try {
-            FileReader fr = new FileReader(file);
+            FileWriter fw = new FileWriter("src/TeenTitians/src/savestate.txt");
+            PrintWriter pw = new PrintWriter(fw);
 
-            BufferedReader br = new BufferedReader(fr);
-            for (lineNo = 1; lineNo <= 105; lineNo++) {
-                if (br.readLine().equals(userName + "." + password)) {
-                    br.readLine();
-                    return lineNo;
-                } else
-                    br.readLine();
+            pw.println(userName + "/" + password);
+            //pw.println("Password");
+
+
+            pw.close();
+        } catch (IOException e) {
+            System.out.println("ERROR!");
+        }
+    }
+
+    /**
+     * Writes the values to the textfile.
+     */
+    public void writeValue() {
+        try {
+            FileWriter fw = new FileWriter("src/TeenTitians/src/savestate.txt");
+            PrintWriter pw = new PrintWriter(fw);
+
+            pw.println("Alo. 333");
+            //pw.println("Password1");
+
+
+            pw.close();
+        } catch (IOException e) {
+            System.out.println("ERROR!");
+        }
+    }
+
+    /**
+     * Reads the username and password along with their specific values.
+     */
+    public void readInfoValue( String roomID, String inventory) {
+        try {
+
+            output = new FileOutputStream("src/TeenTitians/src/savestate.txt");
+
+            // set the properties value
+            prop.setProperty(userName + "/" + password, roomID +"/" + inventory);
+            //prop.setProperty("password", "password1");
+
+
+            // save properties to project root folder
+            prop.store(output, null);
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+    }
+
+    /**
+     * This method simply loads the the values to the console.
+     * This does not have to be used in the overall code.
+     */
+    public String loadvalue() {
+
+        try {
+
+            input = new FileInputStream("src/TeenTitians/src/savestate.txt");
+
+            // load a properties file
+            prop.load(input);
+
+            //get the property value and print it out
+            return (prop.getProperty(userName + "/" + password));
+            //System.out.println(prop.getProperty("password"));
+
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public String readSaveFile(int wantedLine) {
-        //run readLoginInfo, when successful:
-        //on next lines read to current room number and Inventory
-        int lineNo;
-        String line = "";
-        if (wantedLine == 1) {
-            return null;
-        }
-        try {
-
-            FileReader fr = new FileReader(file);
-
-            BufferedReader br = new BufferedReader(fr);
-            for (lineNo = 1; lineNo <= 105; lineNo++) {
-                if (lineNo == wantedLine) {
-                    line = br.readLine();
-                } else
-                    br.readLine();
+            return "LOADERROR";
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
         }
-
-
-        //String[] newStringArray = line.split(".");
-
-        return line;
     }
 }

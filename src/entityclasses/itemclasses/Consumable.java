@@ -1,6 +1,6 @@
 package TeenTitians.src.entityclasses.itemclasses;
 //Consumable class by Clyde
-public class Consumable
+public class Consumable extends Item
 {
 	/**
 	private String [] healing = {"A1 Sauce", "Steak", "A1 Steak", "Rotten Apple","Apple", "Watermelon")
@@ -9,26 +9,43 @@ ArrayList<String> healing = new ArrayList<String>();
 healing.addAll(Arrays.asList(healing));
 **/
 	private int recoverHealth;
-	
-	public Consumable()
-{
-	int recoverHealth = 0;
-} 	
-	public Consumable(int recoverHealth)
-{
-	this.recoverHealth = recoverHealth;
-}
-	public int getRecoverHealth() {
-	return recoverHealth;
-}
-	public void setRecoverHealth(int recoverHealth) {
-	this.recoverHealth = recoverHealth;
-}
+	private int defenceGain;
+	private int accGain;
 
-	public int Heal(boolean useConsumable, int HP)
-{
-	if(useConsumable == true)
-		recoverHealth =  HP + 20;
-	return recoverHealth ;
-}
+	public Consumable() {
+
+    }
+
+	public Consumable(String name, String ID, String description, int goldValue, int recoverHealth, int defenceGain, int accGain) {
+		super(name,ID, description, goldValue);
+		this.recoverHealth = recoverHealth;
+		this.defenceGain = defenceGain;
+		this.accGain = accGain;
+	}
+	public int getRecoverHealth() {
+	    return recoverHealth;
+    }
+	public void setRecoverHealth(int recoverHealth) {
+	    this.recoverHealth = recoverHealth;
+    }
+
+    public int getDefenceGain() {
+        return defenceGain;
+    }
+
+    public void setDefenceGain(int defenceGain) {
+        this.defenceGain = defenceGain;
+    }
+
+    public int getAccGain() {
+        return accGain;
+    }
+
+    public void setAccGain(int accGain) {
+        this.accGain = accGain;
+    }
+
+    public int Heal() {
+		return recoverHealth;
+	}
 }

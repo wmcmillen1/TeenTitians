@@ -4,21 +4,16 @@ import TeenTitians.src.entityclasses.itemclasses.Item;
 //Currency class by Austin
 public class Currency extends Item
 {
-public double Gold;
+public int gold;
 
-public Currency()
-{
-	
-	Gold = 0.0;
-}
 
-public Currency(double Gold)
-{
-	this.Gold= Gold;
+public Currency(String name, String ID, String description, int gold) {
+	super(name, ID, description, gold);
+	this.gold= gold;
 }
 public double spendGold(double itemPrice)
 {
-	double goldLeft = itemPrice - Gold;
+	double goldLeft = itemPrice - gold;
 	return goldLeft;
 }
 /**
@@ -29,7 +24,7 @@ public double spendGold(double itemPrice)
  */
 public double gainGold(double goldPiece)
 {
-	double totalGold = goldPiece + Gold;
+	double totalGold = goldPiece + gold;
 	return totalGold;
 }
 }
